@@ -2,9 +2,12 @@ package com.portal.portal;
 
 import java.util.List;
 
+import javax.websocket.EndpointConfig;
+
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.stepfunctions.AWSStepFunctions;
 import com.amazonaws.services.stepfunctions.AWSStepFunctionsClientBuilder;
@@ -20,9 +23,11 @@ import com.amazonaws.services.stepfunctions.model.StateMachineListItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 
 @SpringBootApplication
-public class PortalApplication extends AbstractAWSStepFunctionsAsync{
+public class PortalApplication{
 
 	public static void main(String[] args) {
 		SpringApplication.run(PortalApplication.class, args);
@@ -40,11 +45,13 @@ public class PortalApplication extends AbstractAWSStepFunctionsAsync{
 		e);
 }
 
-Regions region = Regions.AP_SOUTHEAST_1;
+//Regions region = Regions.AP_SOUTHEAST_1;
 
 AWSStepFunctions sfnClient = AWSStepFunctionsClientBuilder.standard()
 		.withCredentials(credentialsProvider)
-		.withRegion(region)
+		.withEndpointConfiguration(new EndpointConfiguration(
+			"https://states.ap-southeast-1.amazonaws.com","ap-southeast-1"
+		))
 		.build();
 
 		try{
