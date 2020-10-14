@@ -14,7 +14,7 @@ public class controller {
     public String AdminPortalPage(ModelMap model)
     {
 
-        
-        return index;
+
+        return "index";
     }
 }
