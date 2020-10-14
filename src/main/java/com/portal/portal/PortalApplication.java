@@ -1,112 +1,60 @@
 package com.portal.portal;
 
-import java.util.List;
-
-import javax.websocket.EndpointConfig;
-
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.stepfunctions.AWSStepFunctions;
 import com.amazonaws.services.stepfunctions.AWSStepFunctionsClientBuilder;
-import com.amazonaws.services.stepfunctions.AbstractAWSStepFunctionsAsync;
+import com.amazonaws.services.stepfunctions.model.CreateActivityRequest;
+import com.amazonaws.services.stepfunctions.model.CreateActivityResult;
 import com.amazonaws.services.stepfunctions.model.CreateStateMachineRequest;
 import com.amazonaws.services.stepfunctions.model.CreateStateMachineResult;
-import com.amazonaws.services.stepfunctions.model.ListExecutionsRequest;
-import com.amazonaws.services.stepfunctions.model.ListExecutionsResult;
-import com.amazonaws.services.stepfunctions.model.ListStateMachinesRequest;
-import com.amazonaws.services.stepfunctions.model.ListStateMachinesResult;
-import com.amazonaws.services.stepfunctions.model.StateMachineListItem;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 
 @SpringBootApplication
-public class PortalApplication{
+public class PortalApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PortalApplication.class, args);
+        public static void main(String[] args) {
 
-		ProfileCredentialsProvider credentialsProvider =
-		new ProfileCredentialsProvider();
-	try {
-	credentialsProvider.getCredentials();
-	} catch (Exception e) {
-	throw new AmazonClientException(
-		"Cannot load the credentials from the credential profiles " +
-		"file. Please make sure that your credentials file is " +
-		"at the correct location (~/.aws/credentials), and is " +
-		"in valid format.",
-		e);
-}
+                //Declare and initialize Gson object
+                Gson gson = new Gson();
+               
 
-//Regions region = Regions.AP_SOUTHEAST_1;
+                //Provide AWS credentials
+                ProfileCredentialsProvider credentialsProvider = new ProfileCredentialsProvider();
+                try 
+                {
+                        credentialsProvider.getCredentials();
+                } 
+                catch (Exception e) 
+                {
+                        throw new AmazonClientException("Cannot load the credentials from the credential profiles "
+                                        + "file. Please make sure that your credentials file is "
+                                        + "at the correct location (~/.aws/credentials), and is " + "in valid format.",
+                                        e);
+                }
 
-AWSStepFunctions sfnClient = AWSStepFunctionsClientBuilder.standard()
-		.withCredentials(credentialsProvider)
-		.withEndpointConfiguration(new EndpointConfiguration(
-			"https://states.ap-southeast-1.amazonaws.com","ap-southeast-1"
-		))
-		.build();
+                //Make StepFunction Client 
+                AWSStepFunctions sfnClient = AWSStepFunctionsClientBuilder.standard()
+                                .withCredentials(credentialsProvider)
+                                .withEndpointConfiguration(new EndpointConfiguration(
+                                                "states.ap-southeast-1.amazonaws.com", "ap-southeast-1"))
+                                .build();
 
-		try{
-			System.out.println("Listing state machines");
-            ListStateMachinesResult listStateMachinesResult = sfnClient.
-                    listStateMachines(new ListStateMachinesRequest());
+                //Take Json  to convert into string
+                //Create State Machine 
+                //TODO: replace "with definition"  with json file
+                CreateStateMachineResult result = sfnClient.createStateMachine(
+                                new CreateStateMachineRequest().withName("Java")
+                                .withDefinition("{\"Comment\":\"A simple minimal example of the States language\",\"StartAt\":\"Hello World\",\"States\":{\"Hello World\":{\"Type\":\"Pass\",\"End\":true}}}")
+                                .withRoleArn("arn:aws:iam::149081783947:role/PortalTest")
 
-            List<StateMachineListItem> stateMachines = listStateMachinesResult
-                    .getStateMachines();
+                );
+                System.out.println("This is the result of create " + result);
 
-            System.out.println("State machines count: " + stateMachines.size());
-            if (!stateMachines.isEmpty()) {
-                stateMachines.forEach(sm -> {
-                    System.out.println("\t- Name: " + sm.getName());
-                    System.out.println("\t- Arn: " + sm.getStateMachineArn());
-
-                    ListExecutionsRequest listRequest = new
-                            ListExecutionsRequest().withStateMachineArn(sm
-                            .getStateMachineArn());
-                    ListExecutionsResult listExecutionsResult = sfnClient
-                            .listExecutions(listRequest);
-                    List<com.amazonaws.services.stepfunctions.model.ExecutionListItem> executions = listExecutionsResult
-                            .getExecutions();
-
-                    System.out.println("\t- Total: " + executions.size());
-                    executions.forEach(ex -> {
-                        System.out.println("\t\t-Start: " + ex.getStartDate());
-                        System.out.println("\t\t-Stop: " + ex.getStopDate());
-                        System.out.println("\t\t-Name: " + ex.getName());
-                        System.out.println("\t\t-Status: " + ex.getStatus());
-                        System.out.println();
-                    });
-                });
-            }
-			
-
-		}catch(AmazonServiceException ase)
-		{
-			System.out.println("Caught an AmazonServiceException, which means" +
-                    " your request made it to Amazon Step Functions, but was" +
-                    " rejected with an error response for some reason.");
-            System.out.println("Error Message:    " + ase.getMessage());
-            System.out.println("HTTP Status Code: " + ase.getStatusCode());
-            System.out.println("AWS Error Code:   " + ase.getErrorCode());
-            System.out.println("Error Type:       " + ase.getErrorType());
-            System.out.println("Request ID:       " + ase.getRequestId());
-		}
-		 catch (AmazonClientException ace) {
-            System.out.println("Caught an AmazonClientException, which means " +
-                    "the client encountered a serious internal problem while " +
-                    "trying to communicate with Step Functions, such as not " +
-                    "being able to access the network.");
-            System.out.println("Error Message: " + ace.getMessage());
+               
         }
-		}
 }
-
-
