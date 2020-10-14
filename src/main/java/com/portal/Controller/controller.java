@@ -12,10 +12,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Controller
 public class controller {
     
-    @RequestMapping(path = "/aws", method = RequestMethod.GET)
+    @RequestMapping(path = "/aws")
     public String AdminPortalPage(ModelMap model)
     {
-
         return "test";
     }
 }
