@@ -65,12 +65,10 @@
 			<artifactId>tomcat-embed-jasper</artifactId>
                          
 		</dependency>
-<<<<<<< HEAD
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		
 		
 		
-=======
                 <dependency>
                     <groupId>javax.servlet</groupId>
                     <artifactId>jstl</artifactId>
@@ -93,7 +91,6 @@
                     <artifactId>spring-web</artifactId>
                     
                 </dependency>
->>>>>>> cb8b7edb6ce26ae95f11ddf5f9f0dc542165322a
 
 	</dependencies>
 
