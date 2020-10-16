@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-stepfunctions</artifactId>
-			<version>1.11.880</version>
+			
 		</dependency>
 		  <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 			<dependency>
@@ -64,6 +64,10 @@
 			<artifactId>tomcat-embed-jasper</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		
+		
+		
 
 	</dependencies>
 
