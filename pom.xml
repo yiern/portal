@@ -19,7 +19,7 @@
 		<java.version>14</java.version>
 		<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
 	</properties>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -90,7 +90,14 @@
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-web</artifactId>
                     
-                </dependency>
+				</dependency>
+				<!-- https://mvnrepository.com/artifact/org.json/json -->
+				<dependency>
+					<groupId>org.json</groupId>
+					<artifactId>json</artifactId>
+					<version>20200518</version>
+				</dependency>
+
 
 	</dependencies>
 
