@@ -2,7 +2,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
     <script src="/js/jquery.js"></script>
     <script src = "/js/codemirror.js"></script>
     <script src = "/js/javascript.js"></script>
@@ -13,13 +12,14 @@
     <link rel="stylesheet" type="text/css" href="/css/graph.css">
     <link rel="stylesheet" type="text/css" href="/css/codemirror.css">
     <script type="text/javascript" src="/js/sfn.js"></script>
+    <title>State Machine</title>
 </head>
 <body>
+    <h1>Step Function Code</h1>
     <textarea id = "userInput"></textarea><br>
-   
-    <button type = "submit" onclick="saveState()">Save</button><br>
+    <button type = "submit" onclick="saveState()">Save</button><a id = "status"></a><br>
     
-    
+    <h2>Enter Input Code</h2>
     <textarea id = "executionInput"></textarea><br>
     <button type = "submit" onclick="runExecution()">Run execution</button>
     
@@ -27,30 +27,11 @@
         <div id="graph-914" class="workflowgraph">
             <div class="graph-legend">
                 <ul>
-                    <li>
-                        <div class="success"></div>
-                        <span>Success</span>
-                    </li>
-                    <li>
-                        <div class="failed"></div>
-                        <span>Failed</span>
-                    </li>
-                    <li>
-                        <div class="cancelled"></div>
-                        <span>Cancelled</span>
-                    </li>
-                    <li>
-                        <div class="in-progress"></div>
-                        <span>In Progress</span>
-                    </li>
-                    <li>
-                        <div class="caught-error"></div>
-                        <span>Caught Error</span>
-                    </li>
+                    
                 </ul></div><svg></svg></div>
     <script>
 
-       var definition = '${definition}';
+       var definition = ${definition};
         console.log(JSON.stringify (definition));
     
         var editor = CodeMirror.fromTextArea(document.getElementById("userInput"), {
@@ -105,9 +86,33 @@
             var ARN = '${ARN}';
         
 
-                $.redirect('/runExecution', {'input': value, 'arn': ARN, 'definition' : JSON.stringify(definition)}, "GET", null,null,false);
+            $.redirect('/runExecution', {'input': value, 'arn': ARN, 'definition' : JSON.stringify(definition)}, "GET", "_blank",null,false);
         }
-       
+       function saveState()
+       {
+           console.log("saving new code");
+           var new_input = editor.getValue();   
+           var ARN = '${ARN}';
+          // $.post("/saveCode",{'input' : new_input, 'arn': ARN});
+        
+          $.ajax({
+              url:"/saveCode",
+              method: "POST",
+              data:{
+                  'input' : new_input,
+                  'arn' : ARN,
+              },
+              success:function(response){
+                  document.getElementById("status").innerHTML = "Successfully saved code";
+                  console.log(response);
+              },
+              error:function(response){
+                document.getElementById("status").innerHTML = "Error saving code";
+                  console.log(response);
+              }
+          })
+           
+       }
      
 
     </script>

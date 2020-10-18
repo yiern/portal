@@ -7,15 +7,18 @@
     <script src = "/js/codemirror.js"></script>
     <script src = "/js/javascript.js"></script>
     <script src="/js/sfn.js"></script>
-   
+    <script src="/js/jquery.redirect.js"></script>
+
     <link rel="stylesheet" type = "text/css" href = "/css/elegant.css">
     <link rel="stylesheet" type = "text/css" href = "/css/darcula.css">
     <link rel="stylesheet" type="text/css" href="/css/graph.css">
     <link rel="stylesheet" type="text/css" href="/css/codemirror.css">
+    <h1>Execution Result</h1>
     
 </head>
 
 <body>
+    
     <div id="graph-914" class="workflowgraph">
         <div class="graph-legend">
             <ul>
@@ -40,6 +43,7 @@
                     <span>Caught Error</span>
                 </li>
             </ul></div><svg></svg></div>
+            <button value = "submit" onclick= "GoBack()">Go Back</button>
 
             <script>
                 var element = document.getElementById('graph-914')
@@ -52,15 +56,25 @@
                         };
                 var userDefinition = '${definition}';
                 var definition = JSON.parse(userDefinition);
-                var event = '${event}';
-                var eventss = JSON.stringify(event)
+                
+                var event = ${event};
+                //var eventss = JSON.stringify(event)
+                console.log(event);
                 
                 var elementId = '#graph-914';
                 /* sample of recurring events from output from java program */
                 var events = {
-                    "events": eventss };
-
+                    "events": event };
+                console.log(events);
                 var graph = new sfn.StateMachineExecutionGraph(definition, events, elementId, options);
                 graph.render();
+
+                function GoBack()
+                {
+                    window.location.replace("/seeStateMachine/"+ "${arn}");
+                }
+              
+
             </script>
+            
 </body>

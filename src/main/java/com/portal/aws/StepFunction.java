@@ -1,24 +1,17 @@
 package com.portal.aws;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.naming.spi.DirStateFactory.Result;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.partitions.model.Endpoint;
 import com.amazonaws.services.stepfunctions.AWSStepFunctions;
 import com.amazonaws.services.stepfunctions.AWSStepFunctionsClientBuilder;
 import com.amazonaws.services.stepfunctions.model.CreateStateMachineRequest;
 import com.amazonaws.services.stepfunctions.model.CreateStateMachineResult;
 import com.amazonaws.services.stepfunctions.model.DeleteStateMachineRequest;
 import com.amazonaws.services.stepfunctions.model.DeleteStateMachineResult;
-import com.amazonaws.services.stepfunctions.model.DescribeExecutionRequest;
-import com.amazonaws.services.stepfunctions.model.DescribeExecutionResult;
 import com.amazonaws.services.stepfunctions.model.DescribeStateMachineRequest;
 import com.amazonaws.services.stepfunctions.model.DescribeStateMachineResult;
 import com.amazonaws.services.stepfunctions.model.GetExecutionHistoryRequest;
@@ -29,11 +22,9 @@ import com.amazonaws.services.stepfunctions.model.ListStateMachinesResult;
 import com.amazonaws.services.stepfunctions.model.StartExecutionRequest;
 import com.amazonaws.services.stepfunctions.model.StartExecutionResult;
 import com.amazonaws.services.stepfunctions.model.StateMachineListItem;
+import com.amazonaws.services.stepfunctions.model.UpdateStateMachineRequest;
+import com.amazonaws.services.stepfunctions.model.UpdateStateMachineResult;
 import com.google.gson.Gson;
-
-import org.apache.tomcat.util.json.JSONParser;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class StepFunction {
 
@@ -157,14 +148,7 @@ public class StepFunction {
         );
         String executionARN = startExecutionResult.getExecutionArn();
 
-        try{
-            Thread.sleep(1400);
-            
-        }
-        catch(InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+        
 		return executionARN;
 	}
 
@@ -176,5 +160,13 @@ public class StepFunction {
 
         return events;
         
+	}
+
+	public void saveCode(String input, String arn) {
+        UpdateStateMachineResult updateStateMachineResult = sfnClient.updateStateMachine(new UpdateStateMachineRequest()
+        .withDefinition(input)
+        .withStateMachineArn(arn));
+
+        updateStateMachineResult.getUpdateDate();
 	}
 }

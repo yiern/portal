@@ -88,5 +88,7 @@
 
       //display names in table
    </script>
-   
+   <form action = "/aws">
+   <button type = "submit">Create new StateMachine</button>
+   </form>
 </body>

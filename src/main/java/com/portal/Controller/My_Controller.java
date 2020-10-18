@@ -1,36 +1,26 @@
 package com.portal.Controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.amazonaws.services.stepfunctions.model.HistoryEvent;
-import com.amazonaws.services.stepfunctions.model.StateMachineListItem;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.portal.aws.StepFunction;
 
-import org.apache.commons.logging.Log;
-import org.apache.tomcat.util.json.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 
 @Controller
 public class My_Controller {
@@ -93,13 +83,28 @@ public class My_Controller {
     public String postExecution(HttpServletRequest request,  @RequestParam String input, @RequestParam String arn,@RequestParam String definition) {
       
         String resultARN = sf.runExecution(arn, input);
-        for(int a =0;a<10000;a++)
+       
+        for(int a =0;a<1400;a++)
         {
-            System.out.println(a);
+        
         }
-        request.setAttribute("event", sf.getExecutionHistory(resultARN));
+        System.out.println(resultARN);
+        List<HistoryEvent> list = sf.getExecutionHistory(resultARN);
+        String jsonStr = new Gson().toJson(list);
+
+        request.setAttribute("event", jsonStr);
         request.setAttribute("definition",definition);
+        request.setAttribute("arn",arn);
         return "execution";
+    }
+
+    @RequestMapping(value = "/saveCode", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveCode( @RequestParam String input,  @RequestParam String arn)
+    {
+        System.out.println("HIHIHIHIHI");
+        System.out.println(input);
+        sf.saveCode(input, arn);
     }
     
     

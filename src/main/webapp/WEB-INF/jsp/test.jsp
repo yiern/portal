@@ -20,32 +20,13 @@
 <body>
 Name:<input type="text" id = "nameText" required> <p id = "errorLabel"></p>
 <textarea id="userInput"></textarea>
-<button id="definition_button">Create StateMachine</button>
+<button id="definition_button">Create!</button>
+<form action = "/awslist">
+<button>Go Back</button>
+</form>
 
 <div id="graph-914" class="workflowgraph">
-        <div class="graph-legend">
-            <ul>
-                <li>
-                    <div class="success"></div>
-                    <span>Success</span>
-                </li>
-                <li>
-                    <div class="failed"></div>
-                    <span>Failed</span>
-                </li>
-                <li>
-                    <div class="cancelled"></div>
-                    <span>Cancelled</span>
-                </li>
-                <li>
-                    <div class="in-progress"></div>
-                    <span>In Progress</span>
-                </li>
-                <li>
-                    <div class="caught-error"></div>
-                    <span>Caught Error</span>
-                </li>
-            </ul></div><svg></svg></div>
+        <svg></svg></div>
 </body>
 
 </html>
