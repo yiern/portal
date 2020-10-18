@@ -9,8 +9,6 @@ import com.amazonaws.services.stepfunctions.model.HistoryEvent;
 import com.google.gson.Gson;
 import com.portal.aws.StepFunction;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -43,8 +41,8 @@ public class My_Controller {
 
     @RequestMapping(value = "/awslist", method = RequestMethod.GET)
     public String listStateMachine(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println(request.getRequestURI());
-        response.setStatus(response.SC_OK);
+      
+        
         // model.put("StateMachineList", sf.ListStateMachineName());
         request.setAttribute("StateMachineList", sf.ListStateMachineName());
         request.setAttribute("StateMachineListARN", sf.ListStateMachineARN());
@@ -72,12 +70,7 @@ public class My_Controller {
         request.setAttribute("definition", sf.seeStateMachine(arn));
         return "details";
     }
-    /*
-     * @RequestMapping(value = "/runExecution", method = RequestMethod.POST) public
-     * String runExecution(String input, String arn) { executionARN =
-     * sf.runExecution(arn,input); //sf.getExecutionHistory(executionARN);
-     * System.out.println(executionARN); return "execution"; }
-     */
+  
 
     @RequestMapping(value = "/runExecution", method = RequestMethod.GET)
     public String postExecution(HttpServletRequest request,  @RequestParam String input, @RequestParam String arn,@RequestParam String definition) {
@@ -88,7 +81,7 @@ public class My_Controller {
         {
         
         }
-        System.out.println(resultARN);
+       
         List<HistoryEvent> list = sf.getExecutionHistory(resultARN);
         String jsonStr = new Gson().toJson(list);
 
@@ -102,8 +95,6 @@ public class My_Controller {
     @ResponseBody
     public void saveCode( @RequestParam String input,  @RequestParam String arn)
     {
-        System.out.println("HIHIHIHIHI");
-        System.out.println(input);
         sf.saveCode(input, arn);
     }
     

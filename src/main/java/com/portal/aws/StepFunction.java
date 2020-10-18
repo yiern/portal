@@ -54,8 +54,7 @@ public class StepFunction {
    // Create State Machine
    public CreateStateMachineResult CreateWorkFlow(String json, String StateMachine_name) {
 
-       System.out.println(json);
-       System.out.println(StateMachine_name);
+      
        CreateStateMachineResult results = sfnClient
                .createStateMachine(new CreateStateMachineRequest().withName(StateMachine_name).withDefinition(json)
                        .withRoleArn("arn:aws:iam::149081783947:role/PortalTest")
@@ -72,12 +71,11 @@ public class StepFunction {
 
         List<StateMachineListItem> stateMachines = listStateMachinesResult.getStateMachines();
         ArrayList<String> sm_name = new ArrayList<String>();
-        System.out.println("State machines count: " + stateMachines.size());
+       
         if (!stateMachines.isEmpty()) {
             stateMachines.forEach(sm -> {
                 sm_name.add(sm.getName());
-                System.out.println("\t- Name: " + sm.getName());
-                System.out.println("\t- Arn: " + sm.getStateMachineArn());
+               
                 
             });
 
@@ -93,12 +91,11 @@ public class StepFunction {
 
         List<StateMachineListItem> stateMachines = listStateMachinesResult.getStateMachines();
         ArrayList<String> sm_ARN = new ArrayList<String>();
-        System.out.println("State machines count: " + stateMachines.size());
+        
         if (!stateMachines.isEmpty()) {
             stateMachines.forEach(sm -> {
                 sm_ARN.add(sm.getStateMachineArn());
-                System.out.println("\t- Name: " + sm.getName());
-                System.out.println("\t- Arn: " + sm.getStateMachineArn());
+                
                 
             });
 

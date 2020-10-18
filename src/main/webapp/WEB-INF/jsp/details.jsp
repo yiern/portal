@@ -30,7 +30,7 @@
                     
                 </ul></div><svg></svg></div>
     <script>
-
+        
        var definition = ${definition};
         console.log(JSON.stringify (definition));
     
@@ -86,7 +86,7 @@
             var ARN = '${ARN}';
         
 
-            $.redirect('/runExecution', {'input': value, 'arn': ARN, 'definition' : JSON.stringify(definition)}, "GET", "_blank",null,false);
+            $.redirect('/runExecution', {'input': value, 'arn': ARN, 'definition' : JSON.stringify(definition)}, "GET");
         }
        function saveState()
        {
